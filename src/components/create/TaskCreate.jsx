@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Task = () => {
+const TaskCreate = () => {
   const [task, setTask] = React.useState({ name: 'task 1', description: '' })
 
   const handleInputChange = (e) => {
@@ -23,4 +23,4 @@ return (
 )
 }
 
-export default Task
+export default TaskCreate
