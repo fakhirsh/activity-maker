@@ -5,48 +5,64 @@ import { useGlobal } from '../GlobalContext';
 
 const Toolbar = () => {
     const { addTask } = useGlobal();
-    const { isEditing, clearSelection } = useGlobal();
+    const { isEditing, clearSelection, addItemToSelectedTask, selectedTaskId, setSelectedTaskId } = useGlobal();
 
     
-    const handleAddTask = () => {
-        // Here you define what a new task looks like
+    const handleAddTask = (e) => {
+        e.stopPropagation(); // Prevent event from propagating
         const newTask = {
             id: Date.now(), // simple unique id
             name: 'New Task',
+            items: [], // Initialize an empty items array
             completed: false,
         };
         addTask(newTask);
     };
+
+    const handleAddTextItem = (e) => {
+        e.stopPropagation(); // Prevent event from propagating
+        if (!selectedTaskId) return; // Guard clause if no task is selected
+        const newTextItem = { type: "text", content: "" }; // Default content as empty string
+        addItemToSelectedTask(newTextItem);
+    };
+
+    const handleAddCodeItem = (e) => {
+        e.stopPropagation(); // Prevent event from propagating
+        if (!selectedTaskId) return; // Guard clause if no task is selected
+        const newCodeItem = { type: "code", content: "" };
+        addItemToSelectedTask(newCodeItem);
+    };
+
+    const handleAddSubmissionItem = (e) => {
+        e.stopPropagation(); // Prevent event from propagating
+        if (!selectedTaskId) return; // Guard clause if no task is selected
+        const newSubmissionItem = { type: "submission", content: "", submitButton: true };
+        addItemToSelectedTask(newSubmissionItem);
+    };
     
     return (
-
-        <div className="toolbar">
-            <div className="toolbar flex flex-col items-center bg-gray-200 p-4 space-y-4">
-                {isEditing ? (
-                    <>
-                        <FontAwesomeIcon icon={faAlignLeft} onClick={clearSelection} size="lg"/>
-                        <FontAwesomeIcon icon={faCode} onClick={clearSelection} size="lg"/>
-                        <FontAwesomeIcon icon={faPaperPlane} onClick={clearSelection} size="lg"/>
-
-                    </>
-                ) : (
-                    <>
-                    {/* Show a plus icon to add tasks when not in edit mode */}
-                    
-                        <button onClick={handleAddTask}>
-                            <FontAwesomeIcon icon={faPlus} size="lg" />
-                        </button>
-              
-                    {/* Add more addition-related buttons/icons here */}
-                    </>
-                )}
-            </div>
+        <div className="toolbar flex flex-col items-center bg-gray-200 p-4 space-y-4">
+            {isEditing ? (
+                <>
+                    <button onClick={handleAddTextItem}>
+                        <FontAwesomeIcon icon={faAlignLeft} size="lg"/>
+                    </button>
+                    <button onClick={handleAddCodeItem}>
+                        <FontAwesomeIcon icon={faCode} size="lg"/>
+                    </button>
+                    <button onClick={handleAddSubmissionItem}>
+                        <FontAwesomeIcon icon={faPaperPlane} size="lg"/>
+                    </button>
+                </>
+            ) : (
+                <>
+                    <button onClick={handleAddTask}>
+                        <FontAwesomeIcon icon={faPlus} size="lg" />
+                    </button>
+                </>
+            )}
         </div>
-
-
-
-        
-    )
+    );
 }
 
 export default Toolbar

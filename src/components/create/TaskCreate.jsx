@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
 import { useGlobal } from '../../GlobalContext';
 
 const TaskCreate = ({task}) => {
   const [description, setDescription] = useState('');
   const { deleteTask, selectTask, clearSelection, selectedTaskId } = useGlobal(); // Assuming `setTasks` is available in your context for updating the tasks array
+  const { moveTaskUp, moveTaskDown, isEditing, setIsEditing } = useGlobal(); // Destructure your new functions from the context
 
   const isSelected = task.id === selectedTaskId;
   const taskRef = useRef(null); // Step 1: Create a ref for the component
@@ -19,22 +20,21 @@ const TaskCreate = ({task}) => {
   }
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      // Add logic to determine if the click is outside the task element
-      // If so, call clearSelection
-      if (taskRef.current && !taskRef.current.contains(event.target)) {
-        clearSelection(); // Call clearSelection if the click is outside
-      }
-    };
+      const handleClickOutside = (event) => {
+          // If there's a click outside the task component, and isEditing is false, clear the selection
+          if (taskRef.current && !taskRef.current.contains(event.target) && !isEditing) {
+              clearSelection();
+          }
+      };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [clearSelection]);
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [clearSelection, isEditing]); // Add isEditing as a dependency
 
   return (
     <div 
       ref={taskRef}
-      className={`task-container relative p-4 border rounded shadow-sm mb-2 ${isSelected ? 'ring-2 ring-blue-300' : ''}`} 
+      className={`task-container relative p-4 border rounded shadow-sm mb-2 ${isSelected ? 'ring-2 ring-blue-300' : ''} min-h-[90px]`} 
       onClick={() => selectTask(task.id)}
     >
           {/* Delete button */}
@@ -44,14 +44,73 @@ const TaskCreate = ({task}) => {
           >
             <FontAwesomeIcon icon={faTimes} />
           </button>
+      
           <label className="block mb-2 font-bold">{task.name}</label>
-          <textarea
-              className="block w-full h-32 px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm resize-y focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50"
-              name="description"
-              value={description} // Bind state to the textarea's value
-              onChange={handleInputChange}
-              placeholder="Description in Markdown"
-          ></textarea>
+
+          <div className="flex-grow mr-4 flex flex-col">
+            {task.items?.map((item, index) => {
+                switch (item.type) {
+                    case "text":
+                        return(
+                          <div className="flex flex-col mt-2">
+                            <label className="block mb-2 font-bold">{item.type}</label>
+                            <textarea 
+                              key={index} 
+                              value={item.content} 
+                              className="px-4 py-2 bg-green-100 border border-gray-300 rounded-md shadow-sm resize-y focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50" 
+                              onChangehandleInputChange />
+                          </div>
+                        )
+                    case "code": // "code" items might be similar to "text" but could be styled differently or use a code editor component
+                        return (
+                          <div className="flex flex-col mt-2">
+                            <label className="block mb-2 font-bold">{item.type}</label>
+                            <textarea 
+                              key={index} 
+                              value={item.content} 
+                              className="px-4 py-2 bg-blue-100 border border-gray-300 rounded-md shadow-sm resize-y focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50" 
+                              onChangehandleInputChange />
+                          </div>
+                        );
+                    case "submission":
+                        return (
+                          <div key={index} className="flex flex-col mt-2">
+                              <label className="block mb-2 font-bold">{item.type}</label>
+                              <textarea 
+                                  className="px-4 py-2 bg-red-100 border border-gray-300 rounded-md shadow-sm resize-y focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50" 
+                                  value={item.content} 
+                                  onChange={handleInputChange}
+                                  placeholder="Enter submission..."
+                              />
+                              {item.submitButton && <button className="mt-2 bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition duration-150 ease-in-out">Submit</button>}
+                          </div>
+                        );
+                    default:
+                        return null;
+                }
+            })}
+          </div>
+
+          {/* Up and Down arrow buttons */}
+          <button
+            className="absolute bottom-0 right-0 mb-8 mr-2 text-blue-500"
+            onClick={(e) => {
+              e.stopPropagation();
+              moveTaskUp(task.id);
+            }}
+          >
+            <FontAwesomeIcon icon={faArrowUp} />
+          </button>
+          <button
+            className="absolute bottom-0 right-0 mb-2 mr-2 text-blue-500"
+            onClick={(e) => {
+              e.stopPropagation();
+              moveTaskDown(task.id);
+            }}
+          >
+            <FontAwesomeIcon icon={faArrowDown} />
+          </button>
+
       </div>
 
   )
