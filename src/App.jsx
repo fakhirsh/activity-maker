@@ -3,6 +3,7 @@ import './App.css'
 import React, { useState } from 'react';
 import ActivityCreate from './components/create/ActivityCreate'
 import Activity from './components/preview/Activity'
+import { GlobalProvider } from './GlobalContext';
 
 function App() {
   const [leftWidth, setLeftWidth] = useState(50); // Starting width in percentage
@@ -26,18 +27,20 @@ function App() {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden">
-      <div className="flex-none" style={{ width: `${leftWidth}%` }}>
-        <ActivityCreate />
+    <GlobalProvider>
+      <div className="flex h-screen overflow-hidden">
+        <div className="flex-none" style={{ width: `${leftWidth}%` }}>
+          <ActivityCreate />
+        </div>
+        <div 
+          className="w-2 bg-gray-400 cursor-col-resize"
+          onMouseDown={startDrag} 
+        />
+        <div className="flex-grow">
+          <Activity />
+        </div>
       </div>
-      <div 
-        className="w-2 bg-gray-400 cursor-col-resize"
-        onMouseDown={startDrag} 
-      />
-      <div className="flex-grow">
-        <Activity />
-      </div>
-    </div>
+    </GlobalProvider>
   );
 }
 
