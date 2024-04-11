@@ -7,7 +7,7 @@ import { useGlobal } from '../../GlobalContext';
 
 const TextItemCreate = ({ task, index}) => {
 
-    const { deleteTaskItem, updateTaskItemContent } = useGlobal();
+    const { deleteTaskItem, updateTaskItem } = useGlobal();
 
     // Access the specific item using the index
     const item = task.items[index];
