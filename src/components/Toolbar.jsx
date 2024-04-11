@@ -22,7 +22,7 @@ const Toolbar = () => {
     const handleAddTextItem = (e) => {
         e.stopPropagation(); // Prevent event from propagating
         if (!selectedTaskId) return; // Guard clause if no task is selected
-        const newTextItem = { type: "text", content: "" }; // Default content as empty string
+        const newTextItem = { type: "markdown", content: "" }; // Default content as empty string
         addItemToSelectedTask(newTextItem);
     };
 

@@ -52,7 +52,7 @@ const TaskCreate = ({task}) => {
           <div className="flex-grow mr-4 flex flex-col">
             {task.items?.map((item, index) => {
                 switch (item.type) {
-                    case "text":
+                    case "markdown":
                         return(
                           <TextItemCreate key={index} task={task} index={index} /> // Use JSX syntax to render the component
                         )
