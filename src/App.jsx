@@ -32,11 +32,7 @@ function App() {
         <div className="flex-none" style={{ width: `${leftWidth}%` }}>
           <ActivityCreate />
         </div>
-        <div 
-          className="w-2 bg-gray-400 cursor-col-resize"
-          onMouseDown={startDrag} 
-        />
-        <div className="flex-grow">
+        <div className="flex-grow overflow-y-auto">
           <Activity />
         </div>
       </div>
