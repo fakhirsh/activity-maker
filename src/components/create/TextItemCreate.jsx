@@ -30,7 +30,7 @@ const TextItemCreate = ({ task, index}) => {
             >
                 <FontAwesomeIcon icon={faTimes} />
             </button>
-            <label className="block mb-2 font-bold">{item.type}</label>
+            <label className="block mb-2 font-bold">{item.type}</label> 
             <textarea 
                 value={item.content}
                 className="px-4 py-2 bg-green-100 border border-gray-300 rounded-md shadow-sm resize-y focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50" 
