@@ -29,6 +29,38 @@ export const GlobalProvider = ({ children }) => {
     setIsEditing(false); // Exit editing mode
   };
 
+  const updateTaskItem = (taskId, itemIndex, newContent) => {
+    setTasks((currentTasks) => {
+        return currentTasks.map((task) => {
+            if (task.id === taskId) {
+                // Create a copy of items and update the specific item's content
+                const updatedItems = task.items.map((item, index) => {
+                    if (index === itemIndex) {
+                        return { ...item, content: newContent };
+                    }
+                    return item;
+                });
+                // Return the updated task
+                return { ...task, items: updatedItems };
+            }
+            return task;
+        });
+    });
+  };
+
+  const deleteTaskItem = (taskId, itemIndex) => {
+    setTasks(prevTasks => prevTasks.map(task => {
+        if (task.id === taskId) {
+            const filteredItems = task.items.filter((_, index) => index !== itemIndex);
+            return { ...task, items: filteredItems };
+        }
+        return task;
+    }));
+  };
+
+  const moveTaskItem = (taskId, itemIndex, direction) => {
+      // Logic to reorder items within a task
+  };
 
   const moveTaskUp = (taskId) => {
     setTasks((currentTasks) => {
@@ -83,6 +115,9 @@ export const GlobalProvider = ({ children }) => {
     moveTaskUp,
     moveTaskDown,
     addItemToSelectedTask,
+    updateTaskItem,
+    deleteTaskItem,
+    moveTaskItem,
     // Add new states and functions here as they are created
   };
 

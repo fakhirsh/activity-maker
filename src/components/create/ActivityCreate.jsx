@@ -12,7 +12,7 @@ const ActivityCreate = () => {
             <div className="toolbar flex-none">
                 <Toolbar />
             </div>
-            <div className="tasks flex-grow p-4">
+            <div className="tasks flex-grow p-4 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 4rem)' }}>
                 <div>Activity</div>
                 {/* Iterate over tasks and render a Task component for each task */}
                 {tasks.map((task) => (

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
 import { useGlobal } from '../../GlobalContext';
+import TextItemCreate from './TextItemCreate';
 
 const TaskCreate = ({task}) => {
   const [description, setDescription] = useState('');
@@ -52,14 +53,7 @@ const TaskCreate = ({task}) => {
                 switch (item.type) {
                     case "text":
                         return(
-                          <div className="flex flex-col mt-2">
-                            <label className="block mb-2 font-bold">{item.type}</label>
-                            <textarea 
-                              key={index} 
-                              value={item.content} 
-                              className="px-4 py-2 bg-green-100 border border-gray-300 rounded-md shadow-sm resize-y focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50" 
-                              onChangehandleInputChange />
-                          </div>
+                          <TextItemCreate key={index} task={task} index={index} /> // Use JSX syntax to render the component
                         )
                     case "code": // "code" items might be similar to "text" but could be styled differently or use a code editor component
                         return (
