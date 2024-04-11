@@ -22,21 +22,21 @@ const Toolbar = () => {
     const handleAddTextItem = (e) => {
         e.stopPropagation(); // Prevent event from propagating
         if (!selectedTaskId) return; // Guard clause if no task is selected
-        const newTextItem = { type: "markdown", content: "" }; // Default content as empty string
+        const newTextItem = { id: Date.now(), type: "markdown", content: "" }; // Default content as empty string
         addItemToSelectedTask(newTextItem);
     };
 
     const handleAddCodeItem = (e) => {
         e.stopPropagation(); // Prevent event from propagating
         if (!selectedTaskId) return; // Guard clause if no task is selected
-        const newCodeItem = { type: "code", content: "" };
+        const newCodeItem = { id: Date.now(), type: "code", content: "" };
         addItemToSelectedTask(newCodeItem);
     };
 
     const handleAddSubmissionItem = (e) => {
         e.stopPropagation(); // Prevent event from propagating
         if (!selectedTaskId) return; // Guard clause if no task is selected
-        const newSubmissionItem = { type: "submission", content: "", submitButton: true };
+        const newSubmissionItem = { id: Date.now(), type: "submission", content: "", submitButton: true };
         addItemToSelectedTask(newSubmissionItem);
     };
     

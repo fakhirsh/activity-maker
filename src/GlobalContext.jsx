@@ -109,6 +109,18 @@ export const GlobalProvider = ({ children }) => {
     setTasks(newItems)
   }
 
+  // ondragend for items in task
+  const onDragEndTaskItems = (result) => {
+    if (!result.destination) return
+
+    const newItems = [...tasks]
+    const [task] = newItems.filter(task => task.id === selectedTaskId)
+    const newTask = { ...task }
+    const [removed] = newTask.items.splice(result.source.index, 1)
+    newTask.items.splice(result.destination.index, 0, removed)
+    setTasks(newItems)
+  }
+
   // Automatically include all states and functions in the provider value
   const contextValue = {
     tasks,
@@ -126,6 +138,7 @@ export const GlobalProvider = ({ children }) => {
     deleteTaskItem,
     moveTaskItem,
     onDragEnd,
+    onDragEndTaskItems,
     // Add new states and functions here as they are created
   };
 
