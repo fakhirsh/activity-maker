@@ -4,6 +4,7 @@ import { faTimes, faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-ico
 import { useGlobal } from '../../GlobalContext';
 import TextItemCreate from './TextItemCreate';
 import CodeItemCreate from './CodeItemCreate';
+import SubmitItemCreate from './SubmitItemCreate';
 
 const TaskCreate = ({task}) => {
   const [description, setDescription] = useState('');
@@ -61,18 +62,21 @@ const TaskCreate = ({task}) => {
                           <CodeItemCreate key={index} task={task} index={index} />
                         );
                     case "submission":
-                        return (
-                          <div key={index} className="flex flex-col mt-2">
-                              <label className="block mb-2 font-bold">{item.type}</label>
-                              <textarea 
-                                  className="px-4 py-2 bg-red-100 border border-gray-300 rounded-md shadow-sm resize-y focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50" 
-                                  value={item.content} 
-                                  onChange={handleInputChange}
-                                  placeholder="Enter submission..."
-                              />
-                              {item.submitButton && <button className="mt-2 bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition duration-150 ease-in-out">Submit</button>}
-                          </div>
-                        );
+                          return (
+                            <SubmitItemCreate key={index} task={task} index={index} />
+                          );
+                        // return (
+                        //   <div key={index} className="flex flex-col mt-2">
+                        //       <label className="block mb-2 font-bold">{item.type}</label>
+                        //       <textarea 
+                        //           className="px-4 py-2 bg-red-100 border border-gray-300 rounded-md shadow-sm resize-y focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50" 
+                        //           value={item.content} 
+                        //           onChange={handleInputChange}
+                        //           placeholder="Enter submission..."
+                        //       />
+                        //       {item.submitButton && <button className="mt-2 bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition duration-150 ease-in-out">Submit</button>}
+                        //   </div>
+                        // );
                     default:
                         return null;
                 }

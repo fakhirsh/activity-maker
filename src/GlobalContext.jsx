@@ -12,7 +12,6 @@ export const GlobalProvider = ({ children }) => {
 
   const addTask = (task) => {
     setTasks((prevTasks) => [...prevTasks, task]);
-    console.log(task);
   };
 
   const deleteTask = (taskId) => {
@@ -92,7 +91,6 @@ export const GlobalProvider = ({ children }) => {
     setTasks((prevTasks) => {
       return prevTasks.map((task) => {
         if (task.id === selectedTaskId) {
-          console.log("Adding item to task:", task); // Debugging line
           // Assuming each task has an 'items' array
           return { ...task, items: [...task.items, item] };
         }
