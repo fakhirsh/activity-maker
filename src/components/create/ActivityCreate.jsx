@@ -13,7 +13,8 @@ const ActivityCreate = () => {
                 <Toolbar />
             </div>
             <div className="tasks flex-grow p-4 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 4rem)' }}>
-                <div>Activity</div>
+                {/* <div className='text-4xl'>Activity</div> */}
+                <input type="text" className="border border-gray-400 p-2 w-full" placeholder="Activity Name" />
                 {/* Iterate over tasks and render a Task component for each task */}
                 {tasks.map((task) => (
                     <TaskCreate key={task.id} task={task} />
