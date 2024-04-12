@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
 import { useGlobal } from '../../GlobalContext';
+import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import TextItemCreate from './TextItemCreate';
 import CodeItemCreate from './CodeItemCreate';
 import SubmitItemCreate from './SubmitItemCreate';
@@ -10,6 +11,7 @@ const TaskCreate = ({task}) => {
   const [description, setDescription] = useState('');
   const { deleteTask, selectTask, clearSelection, selectedTaskId } = useGlobal(); // Assuming `setTasks` is available in your context for updating the tasks array
   const { moveTaskUp, moveTaskDown, isEditing, setIsEditing } = useGlobal(); // Destructure your new functions from the context
+  const { onDragEndTaskItems } = useGlobal();
 
   const isSelected = task.id === selectedTaskId;
   const taskRef = useRef(null); // Step 1: Create a ref for the component
@@ -51,36 +53,38 @@ const TaskCreate = ({task}) => {
           <label className="block mb-2 font-bold">{task.name}</label>
 
           <div className="flex-grow mr-4 flex flex-col">
-            {task.items?.map((item, index) => {
-                switch (item.type) {
-                    case "markdown":
-                        return(
-                          <TextItemCreate key={index} task={task} index={index} /> // Use JSX syntax to render the component
-                        )
-                    case "code": // "code" items might be similar to "text" but could be styled differently or use a code editor component
-                        return (
-                          <CodeItemCreate key={index} task={task} index={index} />
-                        );
-                    case "submission":
-                          return (
-                            <SubmitItemCreate key={index} task={task} index={index} />
-                          );
-                        // return (
-                        //   <div key={index} className="flex flex-col mt-2">
-                        //       <label className="block mb-2 font-bold">{item.type}</label>
-                        //       <textarea 
-                        //           className="px-4 py-2 bg-red-100 border border-gray-300 rounded-md shadow-sm resize-y focus:border-indigo-500 focus:ring focus:ring-indigo-500 focus:ring-opacity-50" 
-                        //           value={item.content} 
-                        //           onChange={handleInputChange}
-                        //           placeholder="Enter submission..."
-                        //       />
-                        //       {item.submitButton && <button className="mt-2 bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition duration-150 ease-in-out">Submit</button>}
-                        //   </div>
-                        // );
-                    default:
-                        return null;
-                }
-            })}
+            <DragDropContext onDragEnd={onDragEndTaskItems}>
+              <Droppable droppableId={task.id.toString()}>
+                {(provided, snapshot) => (
+                  <div
+                    {...provided.droppableProps}
+                    ref={provided.innerRef}
+                  >
+                    {task.items?.map((item, index) => (
+                      
+                      <Draggable key={item.id.toString()} draggableId={item.id.toString()} index={index}>
+
+                        {(provided, snapshot) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                          >
+                            {item.type === "markdown" && <TextItemCreate key={index} task={task} index={index} />}
+                            {item.type === "code" && <CodeItemCreate key={index} task={task} index={index} />}
+                            {item.type === "submission" && <SubmitItemCreate key={index} task={task} index={index} />}
+                          </div> 
+
+                        )}
+                      </Draggable>
+                    ))}
+                    {provided.placeholder}
+                  </div>
+                  
+                )}
+                
+              </Droppable>
+            </DragDropContext>
           </div>
 
           {/* Up and Down arrow buttons */}
