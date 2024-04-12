@@ -27,7 +27,7 @@ const TaskCreate = ({task}) => {
   useEffect(() => {
       const handleClickOutside = (event) => {
           // If there's a click outside the task component, and isEditing is false, clear the selection
-          if (taskRef.current && !taskRef.current.contains(event.target) && !isEditing) {
+          if (taskRef.current && !taskRef.current.contains(event.target)) {
               clearSelection();
           }
       };
