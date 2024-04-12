@@ -9,6 +9,7 @@ export const GlobalProvider = ({ children }) => {
   const [tasks, setTasks] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [selectedTaskId, setSelectedTaskId] = useState(null); // Track the selected task id
+  const [toolbarRef, setToolbarRef] = useState(null);
 
   const addTask = (task) => {
     setTasks((prevTasks) => [...prevTasks, task]);
@@ -121,6 +122,7 @@ export const GlobalProvider = ({ children }) => {
     setTasks(newItems)
   }
 
+
   // Automatically include all states and functions in the provider value
   const contextValue = {
     tasks,
@@ -139,6 +141,8 @@ export const GlobalProvider = ({ children }) => {
     moveTaskItem,
     onDragEnd,
     onDragEndTaskItems,
+    toolbarRef,
+    setToolbarRef,
     // Add new states and functions here as they are created
   };
 

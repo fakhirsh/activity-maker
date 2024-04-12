@@ -1,12 +1,18 @@
 import React from 'react'
+import { useRef, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faAlignLeft, faCode, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import { useGlobal } from '../GlobalContext';
 
 const Toolbar = () => {
     const { addTask } = useGlobal();
-    const { isEditing, clearSelection, addItemToSelectedTask, selectedTaskId, setSelectedTaskId } = useGlobal();
+    const { isEditing, clearSelection, addItemToSelectedTask, selectedTaskId, setSelectedTaskId, toolbarRef, setToolbarRef } = useGlobal();
 
+    const ref = useRef(null);
+
+    useEffect(() => {
+        setToolbarRef(ref);
+    }, [setToolbarRef]);
     
     const handleAddTask = (e) => {
         e.stopPropagation(); // Prevent event from propagating
@@ -41,7 +47,7 @@ const Toolbar = () => {
     };
     
     return (
-        <div className="toolbar flex flex-col items-center bg-gray-200 p-4 space-y-4">
+        <div ref={ref} className="toolbar flex flex-col items-center bg-gray-200 p-4 space-y-4">
             {isEditing ? (
                 <>
                     <button onClick={handleAddTextItem}>

@@ -11,7 +11,7 @@ const TaskCreate = ({task}) => {
   const [description, setDescription] = useState('');
   const { deleteTask, selectTask, clearSelection, selectedTaskId } = useGlobal(); // Assuming `setTasks` is available in your context for updating the tasks array
   const { moveTaskUp, moveTaskDown, isEditing, setIsEditing } = useGlobal(); // Destructure your new functions from the context
-  const { onDragEndTaskItems } = useGlobal();
+  const { onDragEndTaskItems, toolbarRef, setToolbarRef } = useGlobal();
 
   const isSelected = task.id === selectedTaskId;
   const taskRef = useRef(null); // Step 1: Create a ref for the component
@@ -27,14 +27,14 @@ const TaskCreate = ({task}) => {
   useEffect(() => {
       const handleClickOutside = (event) => {
           // If there's a click outside the task component, and isEditing is false, clear the selection
-          if (taskRef.current && !taskRef.current.contains(event.target)) {
+          if (taskRef.current && !taskRef.current.contains(event.target) && !toolbarRef.current?.contains(event.target)) {
               clearSelection();
           }
       };
 
       document.addEventListener('mousedown', handleClickOutside);
       return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [clearSelection, isEditing]); // Add isEditing as a dependency
+  }, [clearSelection, isEditing, toolbarRef]); // Add isEditing as a dependency
 
   return (
     <div 
